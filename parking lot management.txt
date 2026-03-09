@@ -1,0 +1,63 @@
+parking lot management
+track vehicle entry/exit, available spots , and compute parking fees
+
+from datetime import datetime
+
+vehical_spots = 2
+
+
+class ParkingLot:
+    def __init__(self, vehical_spots):
+        self.available_spots = vehical_spots
+        self.vehicals = {}
+
+    def vehical_entry(self, vehical_no):
+        if self.available_spots > 0:
+            self.available_spots -= 1
+            self.vehicals[vehical_no] = datetime.now()
+            print(f"Vehical {vehical_no} entered at {datetime.now()}")
+        else:
+            print("no spots available")
+
+    def vehical_exit(self, vehical_no):
+        if vehical_no in self.vehicals:
+            entry_time = self.vehicals.pop(vehical_no)
+            exit_time = datetime.now()
+            parking_time = (exit_time - entry_time).total_seconds() / 60
+
+            print(f"Vehical {vehical_no} exited at {exit_time}")
+            self.available_spots += 1
+
+            fee = parking_time * 2
+            print(f"Parking fee: ₹{fee:.2f}")
+        else:
+            print("Vehical not found")
+
+
+lot = ParkingLot(vehical_spots)
+
+
+while True:
+    print("\n1. Entry")
+    print("2. Exit")
+    print("3. Show Available Spots")
+    print("4. Exit Program")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        v_no = input("Enter vehicle number: ")
+        lot.vehical_entry(v_no)
+
+    elif choice == "2":
+        v_no = input("Enter vehicle number: ")
+        lot.vehical_exit(v_no)
+
+    elif choice == "3":
+        print("Available spots:", lot.available_spots)
+
+    elif choice == "4":
+        break
+
+    else:
+        print("Invalid choice")

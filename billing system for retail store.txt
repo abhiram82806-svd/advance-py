@@ -1,0 +1,52 @@
+billing system for retail store
+scan products , apply discounts , generate bills , and record transactions
+
+products = {
+    "milk": 30,
+    "bread": 25,
+    "rice": 60,
+    "eggs": 10,
+    "kurkure"  : 10,
+    "lays" : 20,
+    "kitkat" : 35
+}
+
+cart = {}
+total = 0
+
+while True:
+    item = input("Scan product (type 'done' to finish): ").lower()
+
+    if item == "done":
+        break
+
+    if item in products:
+        qty = int(input("Enter quantity: "))
+        cart[item] = qty
+    else:
+        print("Product not found")
+
+
+for item, qty in cart.items():
+    price = products[item]
+    total += price * qty
+
+
+discount = 0
+if total > 100:
+    discount = total * 0.1
+
+final_amount = total - discount
+
+
+print("\nBILL")
+for item, qty in cart.items():
+    print(item, "x", qty, "=", products[item] * qty)
+
+print("Total:", total)
+print(f"Discount(you saved):", discount)
+print("Final Amount:", final_amount)
+with open("transactions.txt", "a") as f:
+    f.write(f"Total:{total} Discount:{discount} Final:{final_amount}\n")
+
+print("Transaction saved!")

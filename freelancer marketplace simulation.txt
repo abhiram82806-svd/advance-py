@@ -1,0 +1,79 @@
+freelancer marketplace simulation
+
+register freelancers and clients ,assign projects and process payments
+
+class Freelancer:
+    def __init__(self, name, skills):
+        self.name = name
+        self.skills = skills
+        self.projects = []
+        self.earnings = 0
+
+
+class Client:
+    def __init__(self, name):
+        self.name = name
+        self.projects = []
+
+
+class Project:
+    def __init__(self, title, budget):
+        self.title = title
+        self.budget = budget
+        self.freelancer = None
+
+
+class Marketplace:
+
+    def __init__(self):
+        self.freelancers = {}
+        self.clients = {}
+        self.projects = {}
+
+    def register_freelancer(self, name, skill):
+        self.freelancers[name] = Freelancer(name, skill)
+        print("Freelancer registered")
+
+    def register_client(self, name):
+        self.clients[name] = Client(name)
+        print("Client registered")
+
+    def create_project(self, client_name, title, budget):
+        if client_name in self.clients:
+            new_project = Project(title, budget)
+            self.projects[title] = new_project
+            self.clients[client_name].projects.append(new_project)
+            print("Project created")
+
+    def assign_project(self, title, freelancer_name):
+        if title in self.projects and freelancer_name in self.freelancers:
+            project = self.projects[title]
+            freelancer = self.freelancers[freelancer_name]
+
+            project.freelancer = freelancer
+            freelancer.projects.append(project)
+
+            print("Project assigned to", freelancer_name)
+
+    def process_payment(self, title):
+        project = self.projects.get(title)
+
+        if project and project.freelancer:
+            project.freelancer.earnings += project.budget
+            print("Payment processed:", project.budget, "to", project.freelancer.name)
+
+
+market = Marketplace()
+
+market.register_freelancer("Ravi", "Python")
+market.register_freelancer("Anita", "Web Design")
+
+market.register_client("TechCorp")
+
+market.create_project("TechCorp", "Website Build", 500)
+
+market.assign_project("Website Build", "Anita")
+
+market.process_payment("Website Build")
+
+print("Anita earnings:", market.freelancers["Anita"].earnings)

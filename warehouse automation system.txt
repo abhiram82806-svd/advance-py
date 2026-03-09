@@ -1,0 +1,70 @@
+warehouse automation system
+
+track goods movement , generate inventory reports and forecast demand
+
+class Product:
+    def __init__(self, name, quantity):
+        self.name = name
+        self.quantity = quantity
+        self.history = []
+
+
+class Warehouse:
+    def __init__(self):
+        self.products = {}
+
+    def add_product(self, name, qty):
+        if name not in self.products:
+            self.products[name] = Product(name, qty)
+        else:
+            self.products[name].quantity += qty
+
+        self.products[name].history.append(("IN", qty))
+        print(qty, name, "added to warehouse")
+
+
+    def remove_product(self, name, qty):
+        if name in self.products and self.products[name].quantity >= qty:
+            self.products[name].quantity -= qty
+            self.products[name].history.append(("OUT", qty))
+            print(qty, name, "shipped")
+        else:
+            print("Not enough stock")
+
+
+    def inventory_report(self):
+        print("\nInventory Report")
+        for p in self.products.values():
+            print(p.name, ":", p.quantity)
+
+
+    def movement_history(self, name):
+        if name in self.products:
+            print("\nMovement history for", name)
+            for record in self.products[name].history:
+                print(record)
+
+
+    def forecast_demand(self, name):
+        if name in self.products:
+            history = self.products[name].history
+            out = sum(qty for action, qty in history if action == "OUT")
+
+            if out > 20:
+                print(name, "High demand - restock soon")
+            else:
+                print(name, "Demand normal")
+
+warehouse = Warehouse()
+
+warehouse.add_product("Laptop", 50)
+warehouse.add_product("Mouse", 100)
+
+warehouse.remove_product("Laptop", 10)
+warehouse.remove_product("Mouse", 25)
+
+warehouse.inventory_report()
+
+warehouse.movement_history("Laptop")
+
+warehouse.forecast_demand("Mouse")

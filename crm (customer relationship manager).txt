@@ -1,0 +1,57 @@
+crm (customer relationship manager)
+
+store customer info , manage communication logs , and track sales pipelines
+
+
+class Customer:
+    def __init__(self, name, email, phone):
+        self.name = name
+        self.email = email
+        self.phone = phone
+        self.logs = []
+        self.sales_stage = "Lead"
+
+    def add_log(self, message):
+        self.logs.append(message)
+
+    def update_stage(self, stage):
+        self.sales_stage = stage
+
+
+class CRM:
+    def __init__(self):
+        self.customers = {}
+
+    def add_customer(self, name, email, phone):
+        customer = Customer(name, email, phone)
+        self.customers[name] = customer
+        print("Customer added")
+
+    def add_communication(self, name, message):
+        if name in self.customers:
+            self.customers[name].add_log(message)
+            print("Log added")
+        else:
+            print("Customer not found")
+
+    def update_sales_stage(self, name, stage):
+        if name in self.customers:
+            self.customers[name].update_stage(stage)
+            print("Stage updated")
+
+    def show_customer(self, name):
+        if name in self.customers:
+            c = self.customers[name]
+            print("Name:", c.name)
+            print("Email:", c.email)
+            print("Phone:", c.phone)
+            print("Sales Stage:", c.sales_stage)
+            print("Communication Logs:", c.logs)
+
+
+crm = CRM()
+
+crm.add_customer("Ravi", "ravi@email.com", "9876543210")
+crm.add_communication("Ravi", "Called customer about product")
+crm.update_sales_stage("Ravi", "Negotiation")
+crm.show_customer("Ravi")
